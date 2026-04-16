@@ -1,0 +1,69 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-12">
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-ink-900">My applications</h1>
+      <p class="text-slate-600 mt-1">Track your progress across open roles.</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="/candidate/profile" class="btn-ghost">Profile</a>
+      <a href="/careers" class="btn-primary">Browse jobs</a>
+    </div>
+  </div>
+
+  <% if (apps.length === 0) { %>
+    <div class="card p-10 text-center text-slate-500">You haven't applied to any roles yet. <a href="/careers" class="text-brand-500 hover:underline">See open roles</a>.</div>
+  <% } else { %>
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-slate-500 text-xs uppercase">
+          <tr>
+            <th class="px-5 py-3">Role</th>
+            <th class="px-5 py-3">Department</th>
+            <th class="px-5 py-3">Applied</th>
+            <th class="px-5 py-3">Status</th>
+            <th class="px-5 py-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% apps.forEach(a => { %>
+            <tr class="border-t border-slate-200">
+              <td class="px-5 py-4 font-medium text-ink-900"><a href="/candidate/application/<%= a.id %>" class="hover:underline"><%= a.title %></a><div class="text-xs text-slate-500"><%= a.location %></div></td>
+              <td class="px-5 py-4"><%= a.department %></td>
+              <td class="px-5 py-4 text-slate-600"><%= formatDate(a.created_at) %></td>
+              <td class="px-5 py-4"><span class="badge <%= statusBadge(a.status) %>"><%= a.status %></span></td>
+              <td class="px-5 py-4 text-right"><a href="/candidate/application/<%= a.id %>" class="text-brand-500 hover:underline">View</a></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+
+  <% if (referrals.length > 0) { %>
+    <div class="mt-12">
+      <h2 class="text-lg font-semibold text-ink-900 mb-4">You've been referred</h2>
+      <div class="card overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-500 text-xs uppercase">
+            <tr><th class="px-5 py-3">Role</th><th class="px-5 py-3">Referred by</th><th class="px-5 py-3">When</th><th class="px-5 py-3">Status</th></tr>
+          </thead>
+          <tbody>
+            <% referrals.forEach(r => { %>
+              <tr class="border-t border-slate-200">
+                <td class="px-5 py-4"><%= r.title %></td>
+                <td class="px-5 py-4"><%= r.referrer_name %></td>
+                <td class="px-5 py-4 text-slate-600"><%= formatDate(r.created_at) %></td>
+                <td class="px-5 py-4"><span class="badge <%= statusBadge(r.status) %>"><%= r.status %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,57 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-10">
+  <div class="flex flex-col md:flex-row gap-8">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="flex-1">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-ink-900">Jobs</h1>
+        <a href="/admin/jobs/new" class="btn-primary">+ New job</a>
+      </div>
+
+      <% if (jobs.length === 0) { %>
+        <div class="card p-10 text-center text-slate-500">No jobs yet.</div>
+      <% } else { %>
+        <div class="card overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-left text-slate-500 text-xs uppercase">
+              <tr>
+                <th class="px-5 py-3">Title</th>
+                <th class="px-5 py-3">Department</th>
+                <th class="px-5 py-3">Location</th>
+                <th class="px-5 py-3">Apps</th>
+                <th class="px-5 py-3">Status</th>
+                <th class="px-5 py-3">Created</th>
+                <th class="px-5 py-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% jobs.forEach(job => { %>
+                <tr class="border-t border-slate-200">
+                  <td class="px-5 py-3 font-medium text-ink-900"><a href="/careers/<%= job.id %>" target="_blank" class="hover:underline"><%= job.title %></a></td>
+                  <td class="px-5 py-3"><%= job.department %></td>
+                  <td class="px-5 py-3"><%= job.location %></td>
+                  <td class="px-5 py-3"><a href="/admin/applications?job_id=<%= job.id %>" class="text-brand-500 hover:underline"><%= job.app_count %></a></td>
+                  <td class="px-5 py-3"><span class="badge <%= statusBadge(job.status) %>"><%= job.status %></span></td>
+                  <td class="px-5 py-3 text-slate-600"><%= formatDate(job.created_at) %></td>
+                  <td class="px-5 py-3 text-right">
+                    <a href="/admin/jobs/<%= job.id %>/edit" class="text-brand-500 hover:underline">Edit</a>
+                    <% if (currentUser.role === 'admin') { %>
+                      <form action="/admin/jobs/<%= job.id %>/delete" method="post" class="inline ml-3" onsubmit="return confirm('Delete this job and all its applications?')">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button class="text-rose-600 hover:underline">Delete</button>
+                      </form>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

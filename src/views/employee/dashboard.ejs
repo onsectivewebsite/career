@@ -1,0 +1,68 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-12">
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-ink-900">Employee referrals</h1>
+      <p class="text-slate-600 mt-1">Refer people you trust and earn when they join.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-10">
+    <div class="card p-4 text-center"><div class="text-xs text-slate-500 uppercase">Invited</div><div class="text-2xl font-bold"><%= summary.invited %></div></div>
+    <div class="card p-4 text-center"><div class="text-xs text-slate-500 uppercase">Applied</div><div class="text-2xl font-bold text-brand-500"><%= summary.applied %></div></div>
+    <div class="card p-4 text-center"><div class="text-xs text-slate-500 uppercase">Interview</div><div class="text-2xl font-bold text-indigo-600"><%= summary.interview %></div></div>
+    <div class="card p-4 text-center"><div class="text-xs text-slate-500 uppercase">Hired</div><div class="text-2xl font-bold text-emerald-600"><%= summary.hired %></div></div>
+    <div class="card p-4 text-center"><div class="text-xs text-slate-500 uppercase">Rejected</div><div class="text-2xl font-bold text-slate-400"><%= summary.rejected %></div></div>
+  </div>
+
+  <h2 class="text-xl font-semibold text-ink-900 mb-4">Refer for an open role</h2>
+  <% if (openJobs.length === 0) { %>
+    <div class="card p-8 text-center text-slate-500">No open roles right now.</div>
+  <% } else { %>
+    <div class="grid md:grid-cols-2 gap-4">
+      <% openJobs.forEach(job => { %>
+        <div class="card p-5 flex items-center justify-between gap-4">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-brand-500 font-semibold"><%= job.department %></div>
+            <div class="font-semibold text-ink-900"><%= job.title %></div>
+            <div class="text-sm text-slate-500"><%= job.location %> · <%= job.employment_type %></div>
+            <% if (job.referral_bonus) { %><div class="text-xs text-emerald-700 font-semibold mt-1">Bonus: <%= job.referral_bonus %></div><% } %>
+          </div>
+          <a href="/employee/refer/<%= job.id %>" class="btn-primary">Refer</a>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <h2 class="text-xl font-semibold text-ink-900 mt-12 mb-4">My referrals</h2>
+  <% if (myRefs.length === 0) { %>
+    <div class="card p-8 text-center text-slate-500">You haven't made any referrals yet.</div>
+  <% } else { %>
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-slate-500 text-xs uppercase">
+          <tr>
+            <th class="px-5 py-3">Candidate</th>
+            <th class="px-5 py-3">Role</th>
+            <th class="px-5 py-3">When</th>
+            <th class="px-5 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% myRefs.forEach(r => { %>
+            <tr class="border-t border-slate-200">
+              <td class="px-5 py-4"><div class="font-medium text-ink-900"><%= r.candidate_name %></div><div class="text-xs text-slate-500"><%= r.candidate_email %></div></td>
+              <td class="px-5 py-4"><%= r.job_title %></td>
+              <td class="px-5 py-4 text-slate-600"><%= formatDate(r.created_at) %></td>
+              <td class="px-5 py-4"><span class="badge <%= statusBadge(r.status) %>"><%= r.status %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

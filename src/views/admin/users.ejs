@@ -1,0 +1,77 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-10">
+  <div class="flex flex-col md:flex-row gap-8">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="flex-1">
+      <h1 class="text-2xl font-bold text-ink-900 mb-6">Users</h1>
+
+      <details class="card p-5 mb-6">
+        <summary class="cursor-pointer font-semibold text-ink-900">+ Invite / create a user</summary>
+        <form action="/admin/users" method="post" class="grid md:grid-cols-5 gap-3 mt-4">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input name="name" class="input" placeholder="Name" required>
+          <input name="email" type="email" class="input" placeholder="email@onsective.com" required>
+          <select name="role" class="input" required>
+            <option value="employee">Employee</option>
+            <option value="hr">HR</option>
+            <option value="admin">Admin</option>
+            <option value="candidate">Candidate</option>
+          </select>
+          <input name="password" type="password" class="input" placeholder="Temp password (8+)" required minlength="8">
+          <button class="btn-primary justify-center">Create</button>
+        </form>
+      </details>
+
+      <div class="card overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-500 text-xs uppercase">
+            <tr>
+              <th class="px-5 py-3">Name</th>
+              <th class="px-5 py-3">Email</th>
+              <th class="px-5 py-3">Role</th>
+              <th class="px-5 py-3">Created</th>
+              <th class="px-5 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(u => { %>
+              <tr class="border-t border-slate-200">
+                <td class="px-5 py-3 font-medium text-ink-900"><%= u.name %> <% if (u.id === currentUser.id) { %><span class="text-xs text-slate-400">(you)</span><% } %></td>
+                <td class="px-5 py-3"><%= u.email %></td>
+                <td class="px-5 py-3">
+                  <form action="/admin/users/<%= u.id %>/role" method="post" class="inline-flex gap-2 items-center">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <select name="role" class="input !py-1 !text-xs w-28">
+                      <% ['candidate','employee','hr','admin'].forEach(r => { %>
+                        <option value="<%= r %>" <%= u.role === r ? 'selected' : '' %>><%= r %></option>
+                      <% }) %>
+                    </select>
+                    <button class="text-xs text-brand-500 hover:underline">Save</button>
+                  </form>
+                </td>
+                <td class="px-5 py-3 text-slate-600"><%= formatDate(u.created_at) %></td>
+                <td class="px-5 py-3 text-right space-x-2">
+                  <form action="/admin/users/<%= u.id %>/reset" method="post" class="inline" onsubmit="var p=prompt('New password (8+ chars):'); if(!p||p.length<8){alert('Too short');return false;} this.pw.value=p;">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="password" class="pw">
+                    <button class="text-xs text-slate-600 hover:underline">Reset password</button>
+                  </form>
+                  <% if (u.id !== currentUser.id) { %>
+                    <form action="/admin/users/<%= u.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this user?')">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <button class="text-xs text-rose-600 hover:underline">Delete</button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,15 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+<section class="container-xl py-16 max-w-md">
+  <h1 class="text-3xl font-bold text-ink-900">Forgot your password?</h1>
+  <p class="text-slate-600 mt-2">Enter your email and we'll send a reset link.</p>
+  <form action="/forgot" method="post" class="card p-8 mt-8 space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div>
+      <label class="label">Email</label>
+      <input name="email" type="email" required class="input">
+    </div>
+    <button class="btn-primary w-full justify-center">Send reset link</button>
+  </form>
+</section>
+<%- include('../partials/footer') %>

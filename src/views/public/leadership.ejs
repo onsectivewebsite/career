@@ -1,0 +1,21 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+<section class="bg-white border-b border-slate-200">
+  <div class="container-xl py-14">
+    <h1 class="text-3xl md:text-4xl font-bold text-ink-900">Leadership</h1>
+    <p class="text-slate-600 mt-2 max-w-2xl">The people behind Onsective — operators, engineers, and builders who care about craft.</p>
+  </div>
+</section>
+<section class="container-xl py-16">
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <% leaders.forEach(p => { %>
+      <div class="card p-6 text-center">
+        <img src="<%= p.photo %>" alt="<%= p.name %>" class="w-32 h-32 rounded-full object-cover mx-auto shadow-sm">
+        <div class="mt-4 font-semibold text-ink-900 text-lg"><%= p.name %></div>
+        <div class="text-sm text-brand-500 font-medium"><%= p.title %></div>
+        <p class="text-sm text-slate-600 mt-3 leading-relaxed"><%= p.bio %></p>
+      </div>
+    <% }) %>
+  </div>
+</section>
+<%- include('../partials/footer') %>

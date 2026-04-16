@@ -1,0 +1,69 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="bg-gradient-to-br from-ink-900 via-ink-800 to-brand-600 text-white">
+  <div class="container-xl py-24 md:py-32">
+    <p class="uppercase tracking-widest text-xs text-brand-400 font-semibold mb-4">Careers at Onsective</p>
+    <h1 class="text-4xl md:text-6xl font-bold leading-tight max-w-3xl">Build what's next in security and software.</h1>
+    <p class="mt-6 text-lg text-slate-300 max-w-2xl">Join a team that ships thoughtful, resilient products for modern enterprises. We are remote-first, curious, and obsessive about quality.</p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="/careers" class="btn-primary">See open roles</a>
+      <a href="/life" class="btn-ghost !text-ink-900">Life at Onsective</a>
+    </div>
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl">
+      <div><div class="text-3xl font-bold"><%= openJobs.length %>+</div><div class="text-sm text-slate-400">Open roles</div></div>
+      <div><div class="text-3xl font-bold">5</div><div class="text-sm text-slate-400">Countries</div></div>
+      <div><div class="text-3xl font-bold">100%</div><div class="text-sm text-slate-400">Remote-first</div></div>
+      <div><div class="text-3xl font-bold">24/7</div><div class="text-sm text-slate-400">Security ops</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="container-xl py-20">
+  <div class="flex items-end justify-between mb-10">
+    <div>
+      <h2 class="text-3xl font-bold text-ink-900">Featured open roles</h2>
+      <p class="text-slate-600 mt-2">Handpicked roles we're actively hiring for right now.</p>
+    </div>
+    <a href="/careers" class="text-brand-500 font-semibold hover:underline hidden sm:inline">View all →</a>
+  </div>
+  <% if (openJobs.length === 0) { %>
+    <div class="card p-10 text-center text-slate-500">No open roles right now. Check back soon.</div>
+  <% } else { %>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <% openJobs.forEach(job => { %>
+        <a href="/careers/<%= job.id %>" class="card p-6 hover:shadow-md transition">
+          <div class="text-xs uppercase tracking-wider text-brand-500 font-semibold mb-2"><%= job.department %></div>
+          <h3 class="text-lg font-semibold text-ink-900 mb-2"><%= job.title %></h3>
+          <div class="text-sm text-slate-500"><%= job.location %> · <%= job.employment_type %></div>
+        </a>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<section class="bg-white border-y border-slate-200">
+  <div class="container-xl py-20">
+    <h2 class="text-3xl font-bold text-ink-900 mb-2">Leadership</h2>
+    <p class="text-slate-600 mb-10">The people shaping Onsective.</p>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <% leaders.forEach(p => { %>
+        <div class="text-center">
+          <img src="<%= p.photo %>" alt="<%= p.name %>" class="w-28 h-28 rounded-full object-cover mx-auto shadow-sm">
+          <div class="mt-4 font-semibold text-ink-900"><%= p.name %></div>
+          <div class="text-sm text-slate-500"><%= p.title %></div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="container-xl py-20">
+  <div class="card p-10 md:p-14 bg-gradient-to-br from-brand-500 to-brand-600 text-white">
+    <h2 class="text-3xl md:text-4xl font-bold mb-3">Know someone great?</h2>
+    <p class="text-blue-100 max-w-2xl mb-8">Our team grows through trust. If you work at Onsective, refer a friend in one click — we'll take care of the rest (and the bonus).</p>
+    <a href="/employee" class="btn-ghost !text-ink-900">Employee referral portal</a>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

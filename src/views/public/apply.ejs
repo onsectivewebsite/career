@@ -1,0 +1,48 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-12 max-w-3xl">
+  <a href="/careers/<%= job.id %>" class="text-sm text-brand-500 font-medium hover:underline">← Back to role</a>
+  <h1 class="text-3xl font-bold text-ink-900 mt-4">Apply · <%= job.title %></h1>
+  <p class="text-slate-600 mt-2">Share a few details and upload your resume. We aim to respond within 7 business days.</p>
+
+  <form action="/careers/<%= job.id %>/apply" method="post" enctype="multipart/form-data" class="card p-8 mt-8 space-y-5">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="label">Full name *</label>
+        <input name="full_name" required class="input" value="<%= prefill ? prefill.name : '' %>">
+      </div>
+      <div>
+        <label class="label">Email *</label>
+        <input name="email" type="email" required class="input" value="<%= prefill ? prefill.email : '' %>">
+      </div>
+      <div>
+        <label class="label">Phone</label>
+        <input name="phone" class="input" value="<%= prefill ? (prefill.phone || '') : '' %>">
+      </div>
+      <div>
+        <label class="label">Location</label>
+        <input name="location" class="input" value="<%= prefill ? (prefill.location || '') : '' %>">
+      </div>
+      <div class="md:col-span-2">
+        <label class="label">LinkedIn URL</label>
+        <input name="linkedin" type="url" placeholder="https://linkedin.com/in/..." class="input" value="<%= prefill ? (prefill.linkedin || '') : '' %>">
+      </div>
+    </div>
+    <div>
+      <label class="label">Resume (PDF, DOC, DOCX — max 8 MB)</label>
+      <input name="resume" type="file" accept=".pdf,.doc,.docx,.rtf,.txt,.odt" required class="input">
+    </div>
+    <div>
+      <label class="label">Cover letter / Why you're a fit</label>
+      <textarea name="cover_letter" rows="6" class="input" placeholder="A few paragraphs is perfect."></textarea>
+    </div>
+    <div class="pt-2 flex items-center justify-between">
+      <p class="text-xs text-slate-500">By applying you consent to us processing your application data. We'll reach out via email.</p>
+      <button class="btn-primary">Submit application</button>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

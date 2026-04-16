@@ -1,0 +1,16 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+<section class="container-xl py-24 max-w-xl text-center">
+  <div class="text-5xl mb-6">✓</div>
+  <h1 class="text-3xl font-bold text-ink-900">Application received</h1>
+  <% if (job) { %>
+    <p class="text-slate-600 mt-3">Thanks for applying for <strong><%= job.title %></strong>. We've sent a confirmation to your email.</p>
+  <% } else { %>
+    <p class="text-slate-600 mt-3">Thanks for applying. We've sent a confirmation to your email.</p>
+  <% } %>
+  <div class="mt-8 flex items-center justify-center gap-3">
+    <a href="/careers" class="btn-ghost">Browse more roles</a>
+    <a href="/candidate" class="btn-primary">Track application</a>
+  </div>
+</section>
+<%- include('../partials/footer') %>

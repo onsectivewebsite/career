@@ -1,0 +1,57 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-10">
+  <div class="flex flex-col md:flex-row gap-8">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="flex-1">
+      <h1 class="text-2xl font-bold text-ink-900 mb-6">Welcome, <%= currentUser.name.split(' ')[0] %></h1>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+        <div class="card p-5"><div class="text-xs text-slate-500 uppercase">Open jobs</div><div class="text-3xl font-bold"><%= counts.openJobs %></div><div class="text-xs text-slate-500"><%= counts.totalJobs %> total</div></div>
+        <div class="card p-5"><div class="text-xs text-slate-500 uppercase">Active applications</div><div class="text-3xl font-bold"><%= counts.activeApps %></div><div class="text-xs text-slate-500"><%= counts.totalApps %> total</div></div>
+        <div class="card p-5"><div class="text-xs text-slate-500 uppercase">Referrals</div><div class="text-3xl font-bold"><%= counts.referrals %></div></div>
+      </div>
+
+      <div class="card p-6 mb-8">
+        <h2 class="font-semibold text-ink-900 mb-4">Application pipeline</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+          <div class="flex justify-between p-3 rounded-md bg-slate-50"><span>Received</span><strong><%= pipeline.received %></strong></div>
+          <div class="flex justify-between p-3 rounded-md bg-blue-50 text-blue-900"><span>Screening</span><strong><%= pipeline.screening %></strong></div>
+          <div class="flex justify-between p-3 rounded-md bg-indigo-50 text-indigo-900"><span>Interview</span><strong><%= pipeline.interview %></strong></div>
+          <div class="flex justify-between p-3 rounded-md bg-amber-50 text-amber-900"><span>Offer</span><strong><%= pipeline.offer %></strong></div>
+          <div class="flex justify-between p-3 rounded-md bg-emerald-50 text-emerald-900"><span>Hired</span><strong><%= pipeline.hired %></strong></div>
+          <div class="flex justify-between p-3 rounded-md bg-rose-50 text-rose-900"><span>Rejected</span><strong><%= pipeline.rejected %></strong></div>
+          <div class="flex justify-between p-3 rounded-md bg-slate-50 text-slate-600 col-span-2 md:col-span-1"><span>Withdrawn</span><strong><%= pipeline.withdrawn %></strong></div>
+        </div>
+      </div>
+
+      <div class="card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+          <h2 class="font-semibold text-ink-900">Recent applications</h2>
+          <a href="/admin/applications" class="text-sm text-brand-500 hover:underline">View all →</a>
+        </div>
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-500 text-xs uppercase">
+            <tr><th class="px-6 py-3">Candidate</th><th class="px-6 py-3">Role</th><th class="px-6 py-3">When</th><th class="px-6 py-3">Status</th></tr>
+          </thead>
+          <tbody>
+            <% if (recentApps.length === 0) { %>
+              <tr><td colspan="4" class="px-6 py-10 text-center text-slate-500">No applications yet.</td></tr>
+            <% } %>
+            <% recentApps.forEach(a => { %>
+              <tr class="border-t border-slate-200">
+                <td class="px-6 py-3"><a href="/admin/applications/<%= a.id %>" class="text-brand-500 hover:underline font-medium"><%= a.full_name %></a><div class="text-xs text-slate-500"><%= a.email %></div></td>
+                <td class="px-6 py-3"><%= a.job_title %></td>
+                <td class="px-6 py-3 text-slate-600"><%= formatDate(a.created_at) %></td>
+                <td class="px-6 py-3"><span class="badge <%= statusBadge(a.status) %>"><%= a.status %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

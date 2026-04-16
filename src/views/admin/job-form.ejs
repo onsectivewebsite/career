@@ -1,0 +1,69 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-10">
+  <div class="flex flex-col md:flex-row gap-8">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="flex-1 max-w-3xl">
+      <a href="/admin/jobs" class="text-sm text-brand-500 font-medium hover:underline">← All jobs</a>
+      <h1 class="text-2xl font-bold text-ink-900 mt-3 mb-6"><%= job ? 'Edit job' : 'New job' %></h1>
+
+      <form action="<%= job ? '/admin/jobs/' + job.id : '/admin/jobs' %>" method="post" class="card p-8 space-y-5">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="md:col-span-2"><label class="label">Title *</label><input name="title" required class="input" value="<%= job ? job.title : '' %>"></div>
+          <div><label class="label">Department *</label><input name="department" required class="input" value="<%= job ? job.department : '' %>"></div>
+          <div><label class="label">Location *</label><input name="location" required class="input" value="<%= job ? job.location : '' %>"></div>
+          <div>
+            <label class="label">Employment type *</label>
+            <select name="employment_type" required class="input">
+              <% ['Full-time','Part-time','Contract','Internship','Temporary'].forEach(t => { %>
+                <option <%= job && job.employment_type === t ? 'selected' : '' %>><%= t %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div>
+            <label class="label">Experience level *</label>
+            <select name="experience_level" required class="input">
+              <% ['Intern','Entry (0-2 years)','Mid-level (2-4 years)','Mid-level (3-5 years)','Senior (5+ years)','Staff / Principal','Director+'].forEach(t => { %>
+                <option <%= job && job.experience_level === t ? 'selected' : '' %>><%= t %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div><label class="label">Salary range</label><input name="salary_range" class="input" value="<%= job ? (job.salary_range || '') : '' %>" placeholder="$90k – $140k"></div>
+          <div><label class="label">Referral bonus</label><input name="referral_bonus" class="input" value="<%= job ? (job.referral_bonus || '') : '' %>" placeholder="$2,000"></div>
+        </div>
+        <div>
+          <label class="label">Summary (one line) *</label>
+          <input name="summary" required class="input" value="<%= job ? job.summary : '' %>">
+        </div>
+        <div>
+          <label class="label">Description *</label>
+          <textarea name="description" rows="7" required class="input"><%= job ? job.description : '' %></textarea>
+        </div>
+        <div>
+          <label class="label">Requirements *</label>
+          <textarea name="requirements" rows="6" required class="input"><%= job ? job.requirements : '' %></textarea>
+        </div>
+        <div>
+          <label class="label">Benefits</label>
+          <textarea name="benefits" rows="4" class="input"><%= job ? (job.benefits || '') : '' %></textarea>
+        </div>
+        <div>
+          <label class="label">Status</label>
+          <select name="status" class="input">
+            <% ['open','draft','closed'].forEach(s => { %>
+              <option value="<%= s %>" <%= job && job.status === s ? 'selected' : (!job && s === 'open' ? 'selected' : '') %>><%= s %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="pt-2 flex items-center justify-between">
+          <a href="/admin/jobs" class="text-sm text-slate-500 hover:underline">Cancel</a>
+          <button class="btn-primary"><%= job ? 'Save changes' : 'Create job' %></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

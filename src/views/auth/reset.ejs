@@ -1,0 +1,18 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+<section class="container-xl py-16 max-w-md">
+  <h1 class="text-3xl font-bold text-ink-900">Set a new password</h1>
+  <form action="/reset/<%= token %>" method="post" class="card p-8 mt-8 space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div>
+      <label class="label">New password</label>
+      <input name="password" type="password" required minlength="8" class="input">
+    </div>
+    <div>
+      <label class="label">Confirm</label>
+      <input name="confirm" type="password" required minlength="8" class="input">
+    </div>
+    <button class="btn-primary w-full justify-center">Update password</button>
+  </form>
+</section>
+<%- include('../partials/footer') %>

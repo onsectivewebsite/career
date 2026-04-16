@@ -1,0 +1,14 @@
+<aside class="md:w-60 shrink-0">
+  <div class="card p-4 md:sticky md:top-20">
+    <div class="text-xs uppercase text-slate-500 font-semibold mb-2">Admin</div>
+    <nav class="flex md:flex-col gap-1 text-sm">
+      <a class="px-3 py-2 rounded-md hover:bg-slate-100 <%= path === '/admin' ? 'bg-slate-100 text-ink-900 font-semibold' : 'text-slate-700' %>" href="/admin">Overview</a>
+      <a class="px-3 py-2 rounded-md hover:bg-slate-100 <%= path.startsWith('/admin/jobs') ? 'bg-slate-100 text-ink-900 font-semibold' : 'text-slate-700' %>" href="/admin/jobs">Jobs</a>
+      <a class="px-3 py-2 rounded-md hover:bg-slate-100 <%= path.startsWith('/admin/applications') ? 'bg-slate-100 text-ink-900 font-semibold' : 'text-slate-700' %>" href="/admin/applications">Applications</a>
+      <a class="px-3 py-2 rounded-md hover:bg-slate-100 <%= path.startsWith('/admin/referrals') ? 'bg-slate-100 text-ink-900 font-semibold' : 'text-slate-700' %>" href="/admin/referrals">Referrals</a>
+      <% if (currentUser && currentUser.role === 'admin') { %>
+        <a class="px-3 py-2 rounded-md hover:bg-slate-100 <%= path.startsWith('/admin/users') ? 'bg-slate-100 text-ink-900 font-semibold' : 'text-slate-700' %>" href="/admin/users">Users</a>
+      <% } %>
+    </nav>
+  </div>
+</aside>

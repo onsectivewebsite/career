@@ -1,0 +1,56 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-12 max-w-3xl">
+  <a href="/candidate" class="text-sm text-brand-500 font-medium hover:underline">← My applications</a>
+  <div class="flex items-center justify-between mt-4">
+    <div>
+      <div class="text-xs uppercase tracking-wider text-brand-500 font-semibold"><%= app.job_department %></div>
+      <h1 class="text-3xl font-bold text-ink-900 mt-1"><%= app.job_title %></h1>
+      <div class="text-sm text-slate-500 mt-1"><%= app.job_location %></div>
+    </div>
+    <span class="badge <%= statusBadge(app.status) %>"><%= app.status %></span>
+  </div>
+
+  <div class="card p-6 mt-8">
+    <h2 class="font-semibold text-ink-900 mb-4">Your details</h2>
+    <dl class="grid grid-cols-2 gap-4 text-sm">
+      <div><dt class="text-slate-500">Name</dt><dd><%= app.full_name %></dd></div>
+      <div><dt class="text-slate-500">Email</dt><dd><%= app.email %></dd></div>
+      <div><dt class="text-slate-500">Phone</dt><dd><%= app.phone || '—' %></dd></div>
+      <div><dt class="text-slate-500">Location</dt><dd><%= app.location || '—' %></dd></div>
+      <% if (app.linkedin) { %><div class="col-span-2"><dt class="text-slate-500">LinkedIn</dt><dd><a href="<%= app.linkedin %>" class="text-brand-500 hover:underline"><%= app.linkedin %></a></dd></div><% } %>
+      <div class="col-span-2"><dt class="text-slate-500">Applied</dt><dd><%= formatDate(app.created_at) %></dd></div>
+    </dl>
+    <% if (app.cover_letter) { %>
+      <div class="mt-6">
+        <div class="text-xs uppercase text-slate-500 font-semibold mb-2">Cover letter</div>
+        <div class="prose-plain"><%= app.cover_letter %></div>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="card p-6 mt-6">
+    <h2 class="font-semibold text-ink-900 mb-4">Timeline</h2>
+    <ol class="space-y-3 text-sm">
+      <% history.forEach(h => { %>
+        <li class="flex items-start gap-3">
+          <div class="w-2 h-2 rounded-full bg-brand-500 mt-2"></div>
+          <div class="flex-1">
+            <div><strong class="text-ink-900"><%= h.to_status %></strong> <span class="text-slate-500">· <%= formatDate(h.created_at) %></span></div>
+            <% if (h.note) { %><div class="text-slate-600"><%= h.note %></div><% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ol>
+  </div>
+
+  <% if (!['hired','rejected','withdrawn'].includes(app.status)) { %>
+    <form action="/candidate/application/<%= app.id %>/withdraw" method="post" class="mt-6" onsubmit="return confirm('Withdraw this application?')">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button class="text-sm text-rose-600 hover:underline">Withdraw application</button>
+    </form>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

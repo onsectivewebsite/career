@@ -1,0 +1,67 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-10">
+  <div class="flex flex-col md:flex-row gap-8">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="flex-1">
+      <h1 class="text-2xl font-bold text-ink-900 mb-6">Applications</h1>
+
+      <form method="get" class="card p-4 mb-6 grid md:grid-cols-4 gap-3">
+        <input name="q" class="input" placeholder="Search name or email" value="<%= filters.q || '' %>">
+        <select name="job_id" class="input">
+          <option value="">All roles</option>
+          <% jobs.forEach(j => { %>
+            <option value="<%= j.id %>" <%= String(filters.job_id) === String(j.id) ? 'selected' : '' %>><%= j.title %></option>
+          <% }) %>
+        </select>
+        <select name="status" class="input">
+          <option value="">All statuses</option>
+          <% ['received','screening','interview','offer','hired','rejected','withdrawn'].forEach(s => { %>
+            <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s %></option>
+          <% }) %>
+        </select>
+        <button class="btn-primary justify-center">Filter</button>
+      </form>
+
+      <div class="card overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-500 text-xs uppercase">
+            <tr>
+              <th class="px-5 py-3">Candidate</th>
+              <th class="px-5 py-3">Role</th>
+              <th class="px-5 py-3">Source</th>
+              <th class="px-5 py-3">Applied</th>
+              <th class="px-5 py-3">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (apps.length === 0) { %>
+              <tr><td colspan="5" class="px-5 py-10 text-center text-slate-500">No applications match your filters.</td></tr>
+            <% } %>
+            <% apps.forEach(a => { %>
+              <tr class="border-t border-slate-200 hover:bg-slate-50">
+                <td class="px-5 py-3">
+                  <a href="/admin/applications/<%= a.id %>" class="text-brand-500 hover:underline font-medium"><%= a.full_name %></a>
+                  <div class="text-xs text-slate-500"><%= a.email %></div>
+                </td>
+                <td class="px-5 py-3"><%= a.job_title %><div class="text-xs text-slate-500"><%= a.job_department %></div></td>
+                <td class="px-5 py-3 text-xs">
+                  <% if (a.referrer_name) { %>
+                    <span class="badge bg-indigo-50 text-indigo-800">Referred</span> <span class="text-slate-500">by <%= a.referrer_name %></span>
+                  <% } else { %>
+                    <span class="text-slate-500">Direct</span>
+                  <% } %>
+                </td>
+                <td class="px-5 py-3 text-slate-600"><%= formatDate(a.created_at) %></td>
+                <td class="px-5 py-3"><span class="badge <%= statusBadge(a.status) %>"><%= a.status %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

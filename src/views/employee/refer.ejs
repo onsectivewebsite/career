@@ -1,0 +1,36 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-12 max-w-2xl">
+  <a href="/employee" class="text-sm text-brand-500 font-medium hover:underline">← Employee portal</a>
+  <h1 class="text-3xl font-bold text-ink-900 mt-4">Refer a candidate</h1>
+  <p class="text-slate-600 mt-2">You're referring for <strong><%= job.title %></strong> — <%= job.department %> · <%= job.location %>. <% if (job.referral_bonus) { %><span class="text-emerald-700 font-semibold">Referral bonus: <%= job.referral_bonus %></span><% } %></p>
+
+  <form action="/employee/refer/<%= job.id %>" method="post" class="card p-8 mt-8 space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div><label class="label">Candidate name *</label><input name="candidate_name" required class="input"></div>
+      <div><label class="label">Candidate email *</label><input name="candidate_email" type="email" required class="input"></div>
+      <div><label class="label">Phone (optional)</label><input name="candidate_phone" class="input"></div>
+      <div>
+        <label class="label">Relationship</label>
+        <select name="relationship" class="input">
+          <option value="">Select...</option>
+          <option>Former colleague</option>
+          <option>Former classmate</option>
+          <option>Friend</option>
+          <option>Met at a conference / meetup</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label class="label">Why you think they'd be a fit</label>
+      <textarea name="note" rows="5" class="input" placeholder="A few sentences helps the team prioritize."></textarea>
+    </div>
+    <div class="text-xs text-slate-500">We'll email your candidate a direct apply link that credits this referral to you. You'll get status updates as it progresses.</div>
+    <button class="btn-primary">Submit referral</button>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

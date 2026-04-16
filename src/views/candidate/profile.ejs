@@ -1,0 +1,45 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-12 max-w-2xl">
+  <h1 class="text-3xl font-bold text-ink-900">Profile</h1>
+  <form action="/candidate/profile" method="post" class="card p-8 mt-8 space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="label">Name</label>
+        <input name="name" class="input" value="<%= currentUser.name %>">
+      </div>
+      <div>
+        <label class="label">Email</label>
+        <input disabled class="input bg-slate-50" value="<%= currentUser.email %>">
+      </div>
+      <div>
+        <label class="label">Phone</label>
+        <input name="phone" class="input" value="<%= currentUser.phone || '' %>">
+      </div>
+      <div>
+        <label class="label">Location</label>
+        <input name="location" class="input" value="<%= currentUser.location || '' %>">
+      </div>
+      <div class="md:col-span-2">
+        <label class="label">Headline</label>
+        <input name="headline" class="input" value="<%= currentUser.headline || '' %>" placeholder="e.g. Senior Backend Engineer">
+      </div>
+      <div class="md:col-span-2">
+        <label class="label">LinkedIn URL</label>
+        <input name="linkedin" class="input" value="<%= currentUser.linkedin || '' %>">
+      </div>
+    </div>
+    <hr class="my-6">
+    <h2 class="font-semibold text-ink-900">Change password</h2>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div><label class="label">Current password</label><input name="current_password" type="password" class="input"></div>
+      <div><label class="label">New password</label><input name="new_password" type="password" class="input"></div>
+      <div><label class="label">Confirm</label><input name="confirm" type="password" class="input"></div>
+    </div>
+    <button class="btn-primary">Save changes</button>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

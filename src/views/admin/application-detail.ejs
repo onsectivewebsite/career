@@ -1,0 +1,88 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+
+<section class="container-xl py-10">
+  <div class="flex flex-col md:flex-row gap-8">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="flex-1 max-w-4xl">
+      <a href="/admin/applications" class="text-sm text-brand-500 font-medium hover:underline">← Applications</a>
+      <div class="flex items-start justify-between mt-3 mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-ink-900"><%= app.full_name %></h1>
+          <div class="text-slate-600 mt-1"><%= app.email %> <% if (app.phone) { %>· <%= app.phone %><% } %></div>
+          <div class="text-sm text-slate-500 mt-1"><%= app.job_title %> · <%= app.job_department %> · <%= app.job_location %></div>
+        </div>
+        <span class="badge <%= statusBadge(app.status) %>"><%= app.status %></span>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 space-y-6">
+          <div class="card p-6">
+            <h2 class="font-semibold text-ink-900 mb-4">Candidate details</h2>
+            <dl class="grid grid-cols-2 gap-4 text-sm">
+              <div><dt class="text-slate-500">Location</dt><dd><%= app.location || '—' %></dd></div>
+              <div><dt class="text-slate-500">LinkedIn</dt><dd><% if (app.linkedin) { %><a href="<%= app.linkedin %>" class="text-brand-500 hover:underline break-all"><%= app.linkedin %></a><% } else { %>—<% } %></dd></div>
+              <div><dt class="text-slate-500">Applied</dt><dd><%= formatDate(app.created_at) %></dd></div>
+              <div><dt class="text-slate-500">Resume</dt><dd><% if (app.resume_path) { %><a href="/uploads/<%= app.resume_path %>" target="_blank" class="text-brand-500 hover:underline"><%= app.resume_original_name || 'Download' %></a><% } else { %>—<% } %></dd></div>
+              <% if (app.referrer_name) { %>
+                <div class="col-span-2"><dt class="text-slate-500">Referral</dt><dd>Referred by <strong><%= app.referrer_name %></strong> (<%= app.referrer_email %>)</dd></div>
+              <% } %>
+            </dl>
+            <% if (app.cover_letter) { %>
+              <hr class="my-5">
+              <div class="text-xs uppercase text-slate-500 font-semibold mb-2">Cover letter</div>
+              <div class="prose-plain"><%= app.cover_letter %></div>
+            <% } %>
+            <% if (app.notes) { %>
+              <hr class="my-5">
+              <div class="text-xs uppercase text-slate-500 font-semibold mb-2">Internal notes</div>
+              <div class="prose-plain"><%= app.notes %></div>
+            <% } %>
+          </div>
+
+          <div class="card p-6">
+            <h2 class="font-semibold text-ink-900 mb-4">Activity</h2>
+            <ol class="space-y-3 text-sm">
+              <% history.forEach(h => { %>
+                <li class="flex items-start gap-3">
+                  <div class="w-2 h-2 rounded-full bg-brand-500 mt-2"></div>
+                  <div class="flex-1">
+                    <div><strong class="text-ink-900"><%= h.to_status %></strong> <span class="text-slate-500">· <%= formatDate(h.created_at) %><% if (h.changed_by_name) { %> · <%= h.changed_by_name %><% } %></span></div>
+                    <% if (h.note) { %><div class="text-slate-600"><%= h.note %></div><% } %>
+                  </div>
+                </li>
+              <% }) %>
+            </ol>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card p-6">
+            <h2 class="font-semibold text-ink-900 mb-4">Move application</h2>
+            <form action="/admin/applications/<%= app.id %>/status" method="post" class="space-y-3">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <div>
+                <label class="label">New status</label>
+                <select name="status" class="input">
+                  <% ['received','screening','interview','offer','hired','rejected','withdrawn'].forEach(s => { %>
+                    <option value="<%= s %>" <%= app.status === s ? 'selected' : '' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div>
+                <label class="label">Note (sent to candidate)</label>
+                <textarea name="note" rows="4" class="input" placeholder="Optional"></textarea>
+              </div>
+              <button class="btn-primary w-full justify-center">Update &amp; email candidate</button>
+            </form>
+          </div>
+          <div class="card p-6 mt-4 bg-slate-50 text-sm">
+            <p class="text-slate-600">Status changes send the candidate an email automatically. Use the note field to give context.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,24 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+<section class="container-xl py-16 max-w-md">
+  <h1 class="text-3xl font-bold text-ink-900">Sign in</h1>
+  <p class="text-slate-600 mt-2">Candidates, employees, HR, and admins — one door.</p>
+  <form action="/login" method="post" class="card p-8 mt-8 space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="next" value="<%= next %>">
+    <div>
+      <label class="label">Email</label>
+      <input name="email" type="email" required class="input" autofocus>
+    </div>
+    <div>
+      <label class="label">Password</label>
+      <input name="password" type="password" required class="input">
+    </div>
+    <button class="btn-primary w-full justify-center">Sign in</button>
+    <div class="flex items-center justify-between text-sm">
+      <a href="/forgot" class="text-brand-500 hover:underline">Forgot password?</a>
+      <a href="/register" class="text-brand-500 hover:underline">Create account</a>
+    </div>
+  </form>
+</section>
+<%- include('../partials/footer') %>

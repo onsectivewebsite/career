@@ -1,0 +1,34 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/nav') %>
+<section class="container-xl py-16 max-w-md">
+  <h1 class="text-3xl font-bold text-ink-900">Create candidate account</h1>
+  <p class="text-slate-600 mt-2">Save applications, track status, and apply faster.</p>
+  <form action="/register" method="post" class="card p-8 mt-8 space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div>
+      <label class="label">Full name</label>
+      <input name="name" required class="input" value="<%= values.name || '' %>">
+    </div>
+    <div>
+      <label class="label">Email</label>
+      <input name="email" type="email" required class="input" value="<%= values.email || '' %>">
+    </div>
+    <div>
+      <label class="label">Phone (optional)</label>
+      <input name="phone" class="input" value="<%= values.phone || '' %>">
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="label">Password</label>
+        <input name="password" type="password" required minlength="8" class="input">
+      </div>
+      <div>
+        <label class="label">Confirm</label>
+        <input name="confirm" type="password" required minlength="8" class="input">
+      </div>
+    </div>
+    <button class="btn-primary w-full justify-center">Create account</button>
+    <p class="text-sm text-slate-500">Already have an account? <a href="/login" class="text-brand-500 hover:underline">Sign in</a></p>
+  </form>
+</section>
+<%- include('../partials/footer') %>
