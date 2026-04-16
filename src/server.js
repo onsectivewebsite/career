@@ -17,6 +17,10 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
+// Behind a reverse proxy (nginx/CloudPanel) in production — trust X-Forwarded-* so
+// secure cookies, req.ip, and protocol detection work correctly.
+if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
+
 // Views
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
